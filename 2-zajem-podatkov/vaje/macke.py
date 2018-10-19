@@ -17,18 +17,18 @@ frontpage_filename = 'frontpage.html'
 csv_filename = 'macke.csv'
 
 
-def download_url_to_string(TODO):
+def download_url_to_string(url):
     '''This function takes a URL as argument and tries to download it
     using requests. Upon success, it returns the page contents as string.'''
     try:
         # del kode, ki morda sproži napako
-        return TODO
-    except 'TODO':
+        r = requests.get(url)
+    except requests.exceptions.ConnectionError:
         # koda, ki se izvede pri napaki
         # dovolj je če izpišemo opozorilo in prekinemo izvajanje funkcije
-        return TODO
+        print('Could not access page' + url)
     # nadaljujemo s kodo če ni prišlo do napake
-    return TODO
+    return r.text
 
 
 def save_string_to_file(text, directory, filename):
@@ -44,10 +44,11 @@ def save_string_to_file(text, directory, filename):
 # Definirajte funkcijo, ki prenese glavno stran in jo shrani v datoteko.
 
 
-def save_frontpage(TODO):
+def save_frontpage(url):
     '''Save "cats_frontpage_url" to the file
     "cat_directory"/"frontpage_filename"'''
-    return TODO
+    spletna_stran = download_url_to_string(url)
+    save_string_to_file(spletna_stran, r'C:\\Users\HP\Documents\Programiranje\Programiranje1\programiranje-1\2-zajem-podatkov', 'frontpage.html')
 
 ###############################################################################
 # Po pridobitvi podatkov jih želimo obdelati.
@@ -56,7 +57,9 @@ def save_frontpage(TODO):
 
 def read_file_to_string(directory, filename):
     '''Return the contents of the file "directory"/"filename" as a string.'''
-    return TODO
+    mapa = directory + '\\' + filename
+    with open(mapa, encoding='UTF-8') as datoteka:
+        return datoteka.read()
 
 # Definirajte funkcijo, ki sprejme niz, ki predstavlja vsebino spletne strani,
 # in ga razdeli na dele, kjer vsak del predstavlja en oglas. To storite s
