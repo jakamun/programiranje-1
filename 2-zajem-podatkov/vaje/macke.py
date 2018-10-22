@@ -30,6 +30,7 @@ def download_url_to_string(url):
     # nadaljujemo s kodo če ni prišlo do napake
     return r.text
 
+#print('Dolzina strani je {}.'.format(len(download_url_to_string(cats_frontpage_url))))
 
 def save_string_to_file(text, directory, filename):
     '''Write "text" to the file "filename" located in directory "directory",
@@ -43,12 +44,11 @@ def save_string_to_file(text, directory, filename):
 
 # Definirajte funkcijo, ki prenese glavno stran in jo shrani v datoteko.
 
-
 def save_frontpage(url):
     '''Save "cats_frontpage_url" to the file
     "cat_directory"/"frontpage_filename"'''
     spletna_stran = download_url_to_string(url)
-    save_string_to_file(spletna_stran, r'C:\\Users\HP\Documents\Programiranje\Programiranje1\programiranje-1\2-zajem-podatkov', 'frontpage.html')
+    save_string_to_file(spletna_stran, r'C:\\Users\HP\Documents\Programiranje\Programiranje1\programiranje-1\2-zajem-podatkov\vaje', 'frontpage_macke.html')
 
 ###############################################################################
 # Po pridobitvi podatkov jih želimo obdelati.
@@ -67,9 +67,16 @@ def read_file_to_string(directory, filename):
 # oglasa. Funkcija naj vrne seznam nizov.
 
 
-def page_to_ads(TODO):
+def page_to_ads(absolutna_pot_datoteke):
     '''Split "page" to a list of advertisement blocks.'''
-    return TODO
+    directory, frontpage = os.path.split(absolutna_pot_datoteke)
+    spletna_stran = read_file_to_string(directory, frontpage)
+    vzorec = r'<div class="ad.*?">.*?</div>'
+    odrezi = r'<div class="clear">&nbsp;</div>$'
+    seznam_oglasov = re.split(vzorec, frontpage)
+    odrezano = seznam_oglasov[-1]
+    seznam_oglasov[-1] = re.split(odrezi, odrezano)[0]
+    return seznam_oglasov[1:]
 
 # Definirajte funkcijo, ki sprejme niz, ki predstavlja oglas, in izlušči
 # podatke o imenu, ceni in opisu v oglasu.
