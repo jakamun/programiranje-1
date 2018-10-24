@@ -30,7 +30,7 @@ def download_url_to_string(url):
     # nadaljujemo s kodo če ni prišlo do napake
     return r.text
 
-#print('Dolzina strani je {}.'.format(len(download_url_to_string(cats_frontpage_url))))
+# print('Dolzina strani je {}.'.format(len(download_url_to_string(cats_frontpage_url))))
 
 def save_string_to_file(text, directory, filename):
     '''Write "text" to the file "filename" located in directory "directory",
@@ -71,30 +71,46 @@ def page_to_ads(absolutna_pot_datoteke):
     '''Split "page" to a list of advertisement blocks.'''
     directory, frontpage = os.path.split(absolutna_pot_datoteke)
     spletna_stran = read_file_to_string(directory, frontpage)
-    vzorec = r'<div class="ad.*?">.*?</div>'
-    odrezi = r'<div class="clear">&nbsp;</div>$'
-    seznam_oglasov = re.split(vzorec, frontpage)
+    vzorec = re.compile(r'<div class="coloumn image">') 
+    odrezi = re.compile(r'<div class="clear">&nbsp;</div>')
+    seznam_oglasov = vzorec.split(spletna_stran)
     odrezano = seznam_oglasov[-1]
-    seznam_oglasov[-1] = re.split(odrezi, odrezano)[0]
+    odrezano = odrezi.split(odrezano)
+    seznam_oglasov[-1] = odrezano[0]
     return seznam_oglasov[1:]
+
+# page_to_ads(r'c:\\Users\HP\Documents\Programiranje\Programiranje1\programiranje-1\2-zajem-podatkov\vaje\frontpage_macke.html')
 
 # Definirajte funkcijo, ki sprejme niz, ki predstavlja oglas, in izlušči
 # podatke o imenu, ceni in opisu v oglasu.
 
 
-def get_dict_from_ad_block(TODO):
+def get_dict_from_ad_block(oglas):
     '''Build a dictionary containing the name, description and price
     of an ad block.'''
-    return TODO
+    vzorec = re.compile(
+        r'<h3><a title="(?P<ime>.+?)" href=".*?'
+        r'</a></h3>\n\n\s+(?P<opis>.+?)\s+<div class=".*?">'
+        r'\s*<div class="price">(<span>|)(?P<cena>.*?)(</span>|)</div>.*?',
+        re.DOTALL)
+    ujemanje = vzorec.search(oglas)
+    slovar = ujemanje.groupdict()
+    return slovar
+
+# get_dict_from_ad_block(page_to_ads(r'c:\\Users\HP\Documents\Programiranje\Programiranje1\programiranje-1\2-zajem-podatkov\vaje\frontpage_macke.html')[0])
 
 # Definirajte funkcijo, ki sprejme ime in lokacijo datoteke, ki vsebuje
 # besedilo spletne strani, in vrne seznam slovarjev, ki vsebujejo podatke o
 # vseh oglasih strani.
 
 
-def ads_from_file(TODO):
+def ads_from_file(pot_do_datoteke):
     '''Parse the ads in filename/directory into a dictionary list.'''
-    return TODO
+    seznam_oglasov = page_to_ads(pot_do_datoteke)
+    seznam_slovarjev = []
+    for oglas in seznam_oglasov:
+        seznam_slovarjev.append(get_dict_from_ad_block(oglas))
+    return seznam_slovarjev
 
 ###############################################################################
 # Obdelane podatke želimo sedaj shraniti.
@@ -107,7 +123,7 @@ def write_csv(fieldnames, rows, directory, filename):
     cell-value.'''
     os.makedirs(directory, exist_ok=True)
     path = os.path.join(directory, filename)
-    with open(path, 'w') as csv_file:
+    with open(path, 'w', encoding='utf-8') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
         for row in rows:
@@ -119,5 +135,9 @@ def write_csv(fieldnames, rows, directory, filename):
 # stolpce [fieldnames] pridobite iz slovarjev.
 
 
-def write_cat_ads_to_csv(TODO):
-    return TODO
+def write_cat_ads_to_csv(pot, datoteka, frontpage):
+    spletna_stran = os.path.join(pot, frontpage)
+    seznam_podatkov = ads_from_file(spletna_stran)
+    fieldnames = ['ime', 'opis', 'cena']
+    write_csv(fieldnames, seznam_podatkov, pot, datoteka)
+    return None
