@@ -30,7 +30,6 @@ def download_url_to_string(url):
     # nadaljujemo s kodo če ni prišlo do napake
     return r.text
 
-# print('Dolzina strani je {}.'.format(len(download_url_to_string(cats_frontpage_url))))
 
 def save_string_to_file(text, directory, filename):
     '''Write "text" to the file "filename" located in directory "directory",
@@ -44,11 +43,11 @@ def save_string_to_file(text, directory, filename):
 
 # Definirajte funkcijo, ki prenese glavno stran in jo shrani v datoteko.
 
-def save_frontpage(url):
+def save_frontpage(url, frontpage):
     '''Save "cats_frontpage_url" to the file
     "cat_directory"/"frontpage_filename"'''
     spletna_stran = download_url_to_string(url)
-    save_string_to_file(spletna_stran, r'C:\\Users\HP\Documents\Programiranje\Programiranje1\programiranje-1\2-zajem-podatkov\vaje', 'frontpage_macke.html')
+    save_string_to_file(spletna_stran, r'C:\\Users\HP\Documents\Programiranje\Programiranje1\programiranje-1\2-zajem-podatkov\vaje', frontpage)
 
 ###############################################################################
 # Po pridobitvi podatkov jih želimo obdelati.

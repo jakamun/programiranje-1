@@ -17,4 +17,4 @@ This should automatically open a new tab in your browser.
   * import the cat library, and
   * create separate cells with documentation for each step of the process (download, splitting, etc)
 
-* work through the [pandas exercises](pandas_101.ipynb)
+* work through the [pandas exercises](pandas_101.ipynb) *ta del vaje naredis na filmih* 
