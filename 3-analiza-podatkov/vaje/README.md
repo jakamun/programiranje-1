@@ -25,8 +25,5 @@ zavihek vašega spletnega brskalnika.
   * Uvozite knjižnico za mačke, ki ste jo napisali na prejšnjih vajah.
   * Dodajte celice kjer izvršujete kodo za pridobivanje in obdelavo podatkov in jih dokumentirajte.
 
-<<<<<<< HEAD
 * work through the [pandas exercises](pandas_101.ipynb) *ta del vaje naredis na filmih* 
-=======
 * Sledite navodilom v [vaje za pandas](pandas_101.ipynb) kjer uporabljate profesorjevo bazo filmov.
->>>>>>> 6f2c567309c420a908c094a18af2a977ae605a7c
