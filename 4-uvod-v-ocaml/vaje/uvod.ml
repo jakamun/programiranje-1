@@ -9,7 +9,12 @@
  - : int = 3
 [*----------------------------------------------------------------------------*)
 
-let rec penultimate_element = ()
+let rec penultimate_element list = 
+  match list with
+  | [] -> failwith "Seznam prekratek."
+  | x :: [] -> failwith "Seznam prekratek."
+  | x :: y :: [] -> x
+  | x :: y :: ys -> penultimate_element (y :: ys)
 
 (*----------------------------------------------------------------------------*]
  Funkcija [get k list] poišče [k]-ti element v seznamu [list]. Številčenje
@@ -20,8 +25,11 @@ let rec penultimate_element = ()
  - : int = 1
 [*----------------------------------------------------------------------------*)
 
-let rec get = ()
-
+let rec get k = function
+  | [] -> failwith "Seznam prekratek."
+  | x :: xs when k <= 0 -> x 
+  | x :: xs -> get(k-1) xs
+  
 (*----------------------------------------------------------------------------*]
  Funkcija [double] podvoji pojavitve elementov v seznamu.
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -29,8 +37,14 @@ let rec get = ()
  - : int list = [1; 1; 2; 2; 3; 3]
 [*----------------------------------------------------------------------------*)
 
-let rec double = ()
+let rec podvoji = function
+  | [] -> []
+  | x :: [] -> [x; x]
+  | x :: xs -> [x; x] @ podvoji xs  
 
+  (*x::[x]*)
+  (*x::x::[]*)
+  (*[x;x]*)
 (*----------------------------------------------------------------------------*]
  Funkcija [divide k list] seznam razdeli na dva seznama. Prvi vsebuje prvih [k]
  elementov, drugi pa vse ostale. Funkcija vrne par teh seznamov. V primeru, ko
@@ -42,7 +56,13 @@ let rec double = ()
  - : int list * int list = ([1; 2; 3; 4; 5], [])
 [*----------------------------------------------------------------------------*)
 
-let rec divide = ()
+let rec divide k list = 
+  match k, list with
+  | k, list when k <= 0 -> ([], list)
+  | k, [] -> ([], [])
+  | k, x :: xs ->
+    let (left, right) = divide (k-1) xs in
+    (x :: left, right)
 
 (*----------------------------------------------------------------------------*]
  Funkcija [delete k list] iz seznama izbriše [k]-ti element. V primeru
@@ -52,7 +72,12 @@ let rec divide = ()
  - : int list = [0; 0; 0; 0; 0]
 [*----------------------------------------------------------------------------*)
 
-let rec delete = ()
+let rec delete k = function
+  | [] -> []
+  | list when k < 0 -> list
+  | x :: [] when k = 0 -> []
+  | x :: xs when k = 0 -> xs
+  | x :: xs -> x :: delete (k - 1) xs
 
 (*----------------------------------------------------------------------------*]
  Funkcija [slice i k list] sestavi nov seznam, ki vsebuje elemente seznama
@@ -63,7 +88,16 @@ let rec delete = ()
  - : int list = [1; 2; 3]
 [*----------------------------------------------------------------------------*)
 
-let rec slice = ()
+let rec slice i k list = 
+  let rec do_elementa n = function
+      | [] -> []
+      | x :: xs -> if n = 0 then [] else x :: do_elementa (n-1) xs
+    in
+    let rec od_elementa n = function
+      | [] -> []
+      | x :: xs as sez -> if n = 0 then sez else od_elementa (n-1) xs
+    in
+    do_elementa (k - i) (od_elementa i list);;  
 
 (*----------------------------------------------------------------------------*]
  Funkcija [insert x k list] na [k]-to mesto seznama [list] vrine element [x].
@@ -75,7 +109,9 @@ let rec slice = ()
  - : int list = [1; 0; 0; 0; 0; 0]
 [*----------------------------------------------------------------------------*)
 
-let rec insert = ()
+let rec insert y k = function
+  | [] -> y :: []
+  | x :: xs as sez -> if k <= 0 then y :: sez else insert y (k-1) xs
 
 (*----------------------------------------------------------------------------*]
  Funkcija [rotate n list] seznam zavrti za [n] mest v levo. Predpostavimo, da
@@ -85,7 +121,9 @@ let rec insert = ()
  - : int list = [3; 4; 5; 1; 2]
 [*----------------------------------------------------------------------------*)
 
-let rec rotate = ()
+let rec rotate n list = 
+  let prvi, drugi = (divide n list) in
+  drugi @ prvi
 
 (*----------------------------------------------------------------------------*]
  Funkcija [remove x list] iz seznama izbriše vse pojavitve elementa [x].
@@ -94,7 +132,10 @@ let rec rotate = ()
  - : int list = [2; 3; 2; 3]
 [*----------------------------------------------------------------------------*)
 
-let rec remove = ()
+let rec remove y = function
+  | [] -> []
+  | x :: [] -> if y = x then [] else x :: []
+  | x :: xs -> if y = x then remove y xs else x :: remove y xs 
 
 (*----------------------------------------------------------------------------*]
  Funkcija [is_palindrome] za dani seznam ugotovi ali predstavlja palindrom.
@@ -106,7 +147,13 @@ let rec remove = ()
  - : bool = false
 [*----------------------------------------------------------------------------*)
 
-let rec is_palindrome = ()
+let rec is_palindrome list = 
+  let rec obrni = function
+    | [] -> []
+    | x :: [] -> [x]
+    | x :: xs -> (obrni xs) @ [x]
+    in
+    list = obrni list
 
 (*----------------------------------------------------------------------------*]
  Funkcija [max_on_components] sprejme dva seznama in vrne nov seznam, katerega
@@ -117,7 +164,12 @@ let rec is_palindrome = ()
  - : int list = [5; 4; 3; 3; 4]
 [*----------------------------------------------------------------------------*)
 
-let rec max_on_components = ()
+let rec max_on_components list sez=
+  match list, sez with
+  | [], [] -> []
+  | [], sez -> []
+  | list, [] -> []
+  | x :: xs, y :: ys -> if x>=y then x :: max_on_components xs ys else y :: max_on_components xs ys
 
 (*----------------------------------------------------------------------------*]
  Funkcija [second_largest] vrne drugo največjo vrednost v seznamu. Pri tem se
@@ -129,4 +181,10 @@ let rec max_on_components = ()
  - : int = 10
 [*----------------------------------------------------------------------------*)
 
-let rec second_largest = ()
+let rec second_largest list =
+  let rec largest k = function
+    | [] -> 0
+    | x :: [] -> if k >= x then k else x
+    | x :: xs -> if k >= x then largest k xs else largest x xs
+    in
+    largest 0 (remove (largest 0 list) list)

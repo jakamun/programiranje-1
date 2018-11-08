@@ -30,6 +30,11 @@ let rec pocasni_fib = function
   | 1 -> 1
   | n -> pocasni_fib (n - 1) + pocasni_fib (n - 2)
 
+let hitri_fib n =
+  let rec aux n a b =
+    if n = 0 then a else aux (n - 1) b (a + b)
+  in aux n 0 1
+
 let rec je_liho = function
   | 0 -> false
   | n -> je_sodo (n - 1)
@@ -55,6 +60,6 @@ let za_lase_privlecena_funkcija = function
   | ((_, 0) :: _) -> 20
 
 let rec skalarni_produkt xs ys =
-    match (xs, ys) with
-    | ([], []) -> 0.
-    | (x :: xs', y :: ys') -> x *. y +. skalarni_produkt xs' ys'
+  match (xs, ys) with
+  | ([], []) -> 0.
+  | (x :: xs', y :: ys') -> x *. y +. skalarni_produkt xs' ys'
