@@ -64,6 +64,7 @@ let rec divide k list =
     let (left, right) = divide (k-1) xs in
     (x :: left, right)
 
+
 (*----------------------------------------------------------------------------*]
  Funkcija [delete k list] iz seznama izbriše [k]-ti element. V primeru
  prekratkega seznama funkcija vrne napako.
