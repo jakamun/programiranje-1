@@ -27,8 +27,7 @@ let rec penultimate_element list =
 
 let rec get k = function
   | [] -> failwith "Seznam prekratek."
-  | x :: xs when k <= 0 -> x 
-  | x :: xs -> get(k-1) xs
+  | x :: xs -> if k <= 0 then x else get (k-1) xs
   
 (*----------------------------------------------------------------------------*]
  Funkcija [double] podvoji pojavitve elementov v seznamu.
@@ -74,11 +73,8 @@ let rec divide k list =
 [*----------------------------------------------------------------------------*)
 
 let rec delete k = function
-  | [] -> []
-  | list when k < 0 -> list
-  | x :: [] when k = 0 -> []
-  | x :: xs when k = 0 -> xs
-  | x :: xs -> x :: delete (k - 1) xs
+  | [] -> failwith "List is too short."
+  | x :: xs -> if k = 0 then xs else x :: delete (k-1) xs
 
 (*----------------------------------------------------------------------------*]
  Funkcija [slice i k list] sestavi nov seznam, ki vsebuje elemente seznama
@@ -89,16 +85,10 @@ let rec delete k = function
  - : int list = [1; 2; 3]
 [*----------------------------------------------------------------------------*)
 
-let rec slice i k list = 
-  let rec do_elementa n = function
-      | [] -> []
-      | x :: xs -> if n = 0 then [] else x :: do_elementa (n-1) xs
-    in
-    let rec od_elementa n = function
-      | [] -> []
-      | x :: xs as sez -> if n = 0 then sez else od_elementa (n-1) xs
-    in
-    do_elementa (k - i) (od_elementa i list);;  
+let slice i k list =
+  let (_, slice1) = divide i list in
+  let (slice2, _) = divide (k - i) slice1 in
+  slice2 
 
 (*----------------------------------------------------------------------------*]
  Funkcija [insert x k list] na [k]-to mesto seznama [list] vrine element [x].
