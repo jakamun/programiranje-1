@@ -12,15 +12,23 @@ type race = Orc | Hobbit | Human
 *)
 
 
-type school = ()
+type school = Fire | Necrotic | Angelic
 
-
-type spell = ()
+type spell = 
+  | Firewall | Blaze
+  | Resurrect | Cripple
+  | Renounce | Banish
 
 (* Veščine [skills], ki jih je čarodej osvojil, so seznam vseh urokov,
    ki jih lahko hitro izvede. Definiraj tip `skills'. *)
 
+type skills = spell list
 
+(*lahko tudi, vendar je slabse*)
+
+type vescine = 
+  | Nic
+  | Uroki of spell * vescine
 
 (* Čarodeja opišemo z imenom, številom življenskih točk [hp], sposobnost [ability]
    ki jo predstavimo s številom točk mane, raso [race] in veščino [skills].
@@ -29,12 +37,14 @@ type spell = ()
 type mana = int
 type health = int
 
-type wizard = {name : string; }
+type wizard = {ime : string; hp : health; ability : mana; rasa : race; vescine: skills}
 
 
 (* Napiši funkcijo ki vsakemu uroku priredi primerno šolo magije. *)
 let school_of_spell = function
-  () -> ()
+  | Firewall | Blaze -> Fire
+  | Resurrect | Cripple -> Necrotic
+  | Renounce | Banish -> Angelic
 
 (* Glede na tabelo napiši funkcijo, ki uroku priredi količino mane,
    ki jo čarodej potrebuje za izvršitev uroka:
@@ -47,7 +57,13 @@ let school_of_spell = function
 
    Namig: Lahko si pomagaš z regex-replace v Notepad++
  *)
-let mana_of_spell = failwith "todo"
+let mana_of_spell = function
+  | Blaze -> 420
+  | Firewall -> 35
+  | Renounce -> 17
+  | Banish -> 103
+  | Resurrect -> 178
+  | Cripple -> 250
 
 (* Ustvari nekaj primerov čarodejov, tako kot je prikazano na primeru Merlina.
    Ponovno si lahko pomagaš s regex-replace.*)
@@ -59,24 +75,36 @@ name : "Kylo Ren",   ability : 589,  hp : 90,    skills : [Resurrect],          
 name : "Snoop Dogg", ability : 420,  hp : 4000,  skills : [Blaze],                         race : Orc
 *)
 
-(* let merlin = {name = "Merlin";   ability = 1832; hp = 9001; skills = [Renounce; Banish];  race = Human} *)
-let frodo =  failwith "todo"
-let ajitam = failwith "todo"
-let mrDuck = failwith "todo"
-let kYloReN = failwith "todo"
-let snoop_dogg = failwith "todo"
+(* let merlin = {ime = "Merlin";   ability = 1832; hp = 9001; vescine = [Renounce; Banish];  rasa = Human} *)
+let frodo =  {ime = "Frodo"; ability = 53; hp = 1000; vescine = [Renounce]; rasa = Hobbit}
+let ajitam = {ime = "Ajitam"; ability = 1337; hp = 7331; vescine = [Firewall; Resurrect; Firewall]; rasa = Hobbit}
+let mrDuck = {ime = "Mr Duck"; ability = 7; hp = 90000; vescine = [Cripple]; rasa = Orc}
+let kYloReN = {ime = "Kylo Ren"; ability = 589; hp = 90; vescine = [Resurrect]; rasa = Human}
+let snoop_dogg = {ime = "Snoop Dogg"; ability = 420; hp = 4000; vescine = [Blaze]; rasa = Orc}
 
 
 (* Napiši funkcijo, ki iz seznama čarodejev vrne čarodeja z največ mane. *)
+
 let rec strongest_wizard (wizards : wizard list) : wizard option =
-  failwith "todo"
+  match wizards with
+  | [] -> None
+  | x :: xs -> 
+  begin
+    match strongest_wizard xs with
+    | None -> Some x
+    | Some x' -> 
+      if x.ability >= x'.ability 
+      then Some x
+      else Some x'
+  end
+
 
 (* Posploši funkcijo strongest_wizard na funkcijo max_list, ki sprejme seznam
    in dodatno funkcijo dveh elementov max : 'a -> 'a -> 'a in vrne maksimalni element seznama
    glede na funkcijo max.
 *)
 
-
+let rec max_list = ()
 
 (* Rase imajo različno občutljivost [vulnerability] na določene šole magije.
    Napiši tip s katerim lahko izraziš kdaj ima rasa visoko [High], navadno [Normal]

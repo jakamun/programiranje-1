@@ -21,7 +21,11 @@
  - : euro = Euro 0.4305
 [*----------------------------------------------------------------------------*)
 
+type euro = Euro of float
+type dollar = Dollar of float
 
+let euro_to_dollar (Euro l) = Dollar (l *. 0.861)
+let dollar_to_euro (Dollar l) = Euro (l /. 0.861)
 
 (*----------------------------------------------------------------------------*]
  Definirajte tip [currency] kot en vsotni tip z konstruktorji za jen, funt
@@ -35,7 +39,17 @@
  - : currency = Pound 0.007
 [*----------------------------------------------------------------------------*)
 
+type currency = 
+       | Yen of float 
+       | Pound of float
+       | Krona of float
+       | Frank of float
 
+let to_pound = function 
+       | Yen denar -> Pound (denar *. 0.007)
+       | Pound denar -> Pound denar
+       | Krona denar -> Pound (denar *. 0.085)
+       | Frank denar -> Pound (denar *. 0.79)
 
 (*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*]
  Želimo uporabljati sezname, ki hranijo tako cela števila kot tudi logične
@@ -57,7 +71,22 @@
  Nato napišite testni primer, ki bi predstavljal "[5; true; false; 7]".
 [*----------------------------------------------------------------------------*)
 
+type integer_bool = 
+       | Stevilo of int 
+       | Logicno of bool
 
+type poseben_seznam = 
+       | Prazen
+       | Sestavljen of integer_bool * poseben_seznam
+       
+let sez = Sestavljen (Stevilo 2, Sestavljen (Logicno true, Prazen))
+
+(*uradna rešitev*)
+
+type intbool_list =
+       | Int of int * intbool_list
+       | Bool of bool * intbool_list
+       | Nil
 
 (*----------------------------------------------------------------------------*]
  Funkcija [intbool_map f_int f_bool ib_list] preslika vrednosti [ib_list] v nov
@@ -65,14 +94,18 @@
  oz. [f_bool].
 [*----------------------------------------------------------------------------*)
 
-let rec intbool_map = ()
+let rec intbool_map f_int f_bool = function
+       | Prazen -> Prazen
+       | Sestavljen (Stevilo x, xs) -> Sestavljen (f_int x, intbool_map f_int f_bool xs)
+       | Sestavljen (Logicno x, xs) -> Sestavljen (f_bool x, intbool_map f_int f_bool xs)
 
 (*----------------------------------------------------------------------------*]
  Funkcija [intbool_reverse] obrne vrstni red elementov [intbool_list] seznama.
  Funkcija je repno rekurzivna.
 [*----------------------------------------------------------------------------*)
 
-let rec intbool_reverse = ()
+let rec intbool_reverse acc = function
+       | 
 
 (*----------------------------------------------------------------------------*]
  Funkcija [intbool_separate ib_list] loči vrednosti [ib_list] v par [list]

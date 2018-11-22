@@ -175,13 +175,10 @@ let rec fold_left f list =
     in
     aux x xs
 
-(*let rec fold_left_no_acc f list = 
-  match list with
-    | [] -> failwith "Prekratek seznam!"
-    | x :: [] -> x
-    | x :: y :: [] -> f x y 
-    | x :: y :: xs -> fold_left_no_acc (f x y) xs
-*)
+let rec fold_left_no_acc f = function
+  | [] | _ :: [] -> failwith "List too short."
+  | x :: y :: [] -> f x y
+  | x :: y :: tl -> fold_left_no_acc f ((f x y) :: tl)
 
 
 (*----------------------------------------------------------------------------*]

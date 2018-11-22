@@ -11,9 +11,21 @@ let rec izracunaj = function
   | Krat (izr1, izr2) -> izracunaj izr1 * izracunaj izr2
 
 type 'a seznam =
-  | Prazen
-  | Sestavljen of 'a * 'a seznam
+  | Prazno
+  | Sestavljeno of 'a * 'a seznam
+
+let sez =  Sestavljeno (1, Sestavljeno (2, Sestavljeno (3,Prazno)))
+
+let rec pretvori_seznam = function
+  | Prazno -> []
+  | Sestavljeno (x, xs) -> x :: pretvori_seznam xs 
 
 type niz =
   | Prazen
-  | Sestavljen of char * niz
+  | Sestavljen of string * niz
+
+let ime = Sestavljen ( "j", Sestavljen ("a", Sestavljen ("k", Sestavljen ("a", Prazen))));;
+
+let rec pretvori_niz = function
+  | Prazen -> ""
+  | Sestavljen (glava, rep) -> glava ^ pretvori_niz rep
