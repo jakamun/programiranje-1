@@ -1,3 +1,4 @@
+(*v ocamlu lahko definiramo svoje izjeme*)
 (* Definiramo izjemo, ki jo bomo sprožili ob vnosu negativnega števila *)
 exception NegativnoStevilo
 
@@ -6,13 +7,16 @@ exception NegativnoStevilo
 try
   (* PREDPRIPRAVA *)
   (* Generatorju psevdonaključnih števil psevdonaključno nastavimo seme. *)
+  (*glede na trenutno uro si računalnik zmisli število, če ni tega si bo skoz isto izbral*)
   Random.self_init ();
   (* OCamlu povemo, naj ujame klic za prekinitev programa. *)
+  (*control c smo mu povedal da naj upošteva kot prekinitev programa*)
   Sys.catch_break true;
   print_string "Do koliko znaš šteti? ";
   (* Z vhodne vrstice preberemo niz in ga pretvorimo v število. *)
   let meja = read_int () in
   (* Izračunamo psevdonaključno število v danih mejah *)
+  (*+1 damo zato ker si zmisli na mejah od 1 pa do (meja-1)*)
   let izmisljeno_stevilo = 1 + Random.int meja in
   print_endline ("Izmislil sem si število med 1 in " ^ string_of_int meja);
 

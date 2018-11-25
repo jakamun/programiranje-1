@@ -14,6 +14,8 @@ type 'a drevo =
   | Prazno
   | Sestavljeno of 'a drevo * 'a * 'a drevo
 
+let primer = Sestavljeno (Sestavljeno (Prazno, 2, Prazno), 3 , Sestavljeno (Prazno, 4, Prazno))
+
 let pozagaj _ = Prazno
 
 let rec stevilo_elementov = function
