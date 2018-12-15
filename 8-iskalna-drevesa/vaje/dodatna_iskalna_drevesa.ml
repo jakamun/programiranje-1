@@ -2,6 +2,10 @@
  DODATNE VAJE 
 [*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*)
 
+type 'a drevo = 
+  | Prazno
+  | Veja of 'a drevo * 'a * 'a drevo
+
 (*----------------------------------------------------------------------------*]
  Funkcija [bst_of_list] iz seznama naredi dvojiško iskalno drevo.
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -9,6 +13,23 @@
  - : bool = true
 [*----------------------------------------------------------------------------*)
 
+(* z uporabo prejšnih funkcij
+let bst_of_list list = List.fold_right insert list Empty *)
+
+let rec vstavi x = function
+  | Prazno -> Veja (Prazno, x, Prazno)
+  | Veja (_, y, _) as drevo when x = y -> drevo
+  | Veja (l, y, d) when x < y -> Veja (vstavi x l, y, d)
+  | Veja (l, y, d) -> Veja (l, y, vstavi x d) 
+
+let bst_of_list sez = 
+  let rec aux acc = function
+  | [] -> acc
+  | x :: xs -> 
+  let vstavljeno = vstavi x acc in
+  aux vstavljeno xs
+  in
+  aux Prazno sez
 
 (*----------------------------------------------------------------------------*]
  Funkcija [tree_sort] uredi seznam s pomočjo pretvorbe v bst in nato nazaj

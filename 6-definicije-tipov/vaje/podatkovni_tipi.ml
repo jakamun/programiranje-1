@@ -71,18 +71,6 @@ let to_pound = function
  Nato napišite testni primer, ki bi predstavljal "[5; true; false; 7]".
 [*----------------------------------------------------------------------------*)
 
-type integer_bool = 
-       | Stevilo of int 
-       | Logicno of bool
-
-type poseben_seznam = 
-       | Prazen
-       | Sestavljen of integer_bool * poseben_seznam
-       
-let sez = Sestavljen (Stevilo 2, Sestavljen (Logicno true, Prazen))
-
-(*uradna rešitev*)
-
 type intbool_list =
        | Int of int * intbool_list
        | Bool of bool * intbool_list
@@ -90,19 +78,14 @@ type intbool_list =
 
 let s = Int (2, Bool (true, Int (42, Bool (true, Nil))))
 
+let test = Int (5, Bool (true, Bool (false, Int (7, Nil))))
+
 (*----------------------------------------------------------------------------*]
  Funkcija [intbool_map f_int f_bool ib_list] preslika vrednosti [ib_list] v nov
  [intbool_list] seznam, kjer na elementih uporabi primerno od funkcij [f_int]
  oz. [f_bool].
 [*----------------------------------------------------------------------------*)
 
-(*na mojem seznamu in ne na uradnem*)
-let rec intbool_map f_int f_bool = function
-       | Prazen -> Prazen
-       | Sestavljen (Stevilo x, xs) -> Sestavljen (Stevilo (f_int x), intbool_map f_int f_bool xs)
-       | Sestavljen (Logicno x, xs) -> Sestavljen (Logicno (f_bool x), intbool_map f_int f_bool xs)
-
-(*na uradnem*)
 let rec map f_int f_bool = function
        | Nil -> Nil
        | Int (x, xs) -> Int (f_int x, map f_int f_bool xs)
@@ -114,15 +97,6 @@ let rec map f_int f_bool = function
 [*----------------------------------------------------------------------------*)
 
 let rec intbool_reverse sez = 
-       let rec aux acc = function
-       | Prazen -> acc
-       | Sestavljen (Stevilo x, xs) -> aux (Sestavljen (Stevilo x, acc)) xs
-       | Sestavljen (Logicno x, xs) -> aux (Sestavljen (Logicno x, acc)) xs
-       in
-       aux Prazen sez
-
-(*na uradnem seznamu*)
-let rec special_reverse sez = 
        let rec aux acc = function
        | Nil -> acc
        | Int (x, xs) -> aux (Int (x, acc)) xs
@@ -136,23 +110,13 @@ let rec special_reverse sez =
  vrednosti. Funkcija je repno rekurzivna in ohranja vrstni red elementov.
 [*----------------------------------------------------------------------------*)
 
-(*tu bom vrnil seznama z mojim tipom seznamov*)
-let rec intbool_separate ib_list =
-       let rec aux iacc bacc = function
-       | Prazen -> (intbool_reverse iacc, intbool_reverse bacc)
-       | Sestavljen (Stevilo x, xs) -> aux (Sestavljen (Stevilo x, iacc)) bacc xs
-       | Sestavljen (Logicno x, xs) -> aux iacc (Sestavljen (Logicno x, bacc)) xs
-       in
-       aux Prazen Prazen ib_list
-
-(*ta seznam je generiran z že vgrajenimi seznami*)
 let rec seperate ib_list = 
        let rec aux iacc bacc = function
        | Nil -> (iacc, bacc)
        | Int (x, xs) -> aux (x :: iacc) bacc xs
        | Bool (x, xs) -> aux iacc (x :: bacc) xs
        in
-       aux [] [] (special_reverse ib_list)
+       aux [] [] (intbool_reverse ib_list)
 
 (*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*]
  Določeni ste bili za vzdrževalca baze podatkov za svetovno priznano čarodejsko
@@ -215,12 +179,9 @@ let prazen = {fire = 0; frost = 0; arcane = 0}
 
 let rec update counter magic = 
        match magic with
-       | Fire -> 
-       let nov = {counter with fire = counter.fire + 1} in nov
-       | Frost -> 
-       let nov = {counter with frost = counter.frost + 1} in nov
-       | Arcane -> 
-       let nov = {counter with arcane = counter.arcane + 1} in nov
+       | Fire -> {counter with fire = counter.fire + 1}
+       | Frost -> {counter with frost = counter.frost + 1}
+       | Arcane -> {counter with arcane = counter.arcane + 1}
 
 (*----------------------------------------------------------------------------*]
  Funkcija [count_magic] sprejme seznam čarodejev in vrne števec uporabnikov
