@@ -1,0 +1,43 @@
+uèinki in èistost sta ravno nasprotna pojma èistost je da nam funkcija ne daje stranskih uèinkov 
+
+moni stranski uèinki:
+	- izpisovanje na zaslon
+	- branje s tipkovnice
+	- nakljuène izbire
+	- izjeme pri izvajanju
+	- delo s datotekami(ki nam spreminjajo datoteke)
+	- spreminjanje seznamov itf.
+
+èista funkcija nam vrne samo rezultat in niè drugega ne spremeni zraven, 
+tako da èe jo še enkat poenemo na istih argumentih vrne isti rezultat,
+èe bi kaj še zraven naredila bi bil rezultat drugaèen
+
+Funkcija je èista, èe ne sproa stranskih uèinkov
+1. Èiste funkcije lahko vedno zamenjamo z njihovimi definicijami.
+2. Èiste funkcije ob enakih argumentih vedno vrnejo enake rezultate.
+
+
+V OCamlu uèinki v tipih funkcij niso vidni
+# print_endline;; # ima stranski uèinek da izpiše to kar ji podamo in vrne unit
+- : string -> unit = <fun>
+# print_string;; deluje podobno le da na koncu ne da znaka za novo vrstico
+# Random.bool;; # zmisli si nakljucno boolovo vrednost torej true ali pa false
+- : unit -> bool = <fun>
+# read_line;; # nè ne vzame pa vrne string oz. ko ga poenemo èaka dokler mu ne damo string-a
+- : unit -> string = <fun> # nè ne vzame pa vrne string
+# read_int;; deluje podobno kot read_line le da v int pretvori in ne v string
+# raise;; je funkcija za sproanje izjem, èe hoèmo da se program na neki toèki sesuje spromo izjemo 
+- : exn -> 'a = <fun>
+# List.iter;; # sprejme neko funkcijo ki ne vrne nièesar in nek seznam in uporabi to funkcijo na seznamu seveda se morajo tipi ujemati
+- : ('a -> unit) -> 'a list -> unit = <fun>
+npr: 
+# List.iter print_endline ["jaka";"munda"];;
+jaka
+munda
+- : unit = ()
+
+
+
+
+
+

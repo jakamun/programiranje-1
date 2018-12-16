@@ -1,0 +1,20 @@
+v modul zapakiramo nek tip in vse ukaze na tem tipu
+že vgrajeni moduli so List, Bool, ...
+kako približno to definiramo:
+
+module RGB(paæ nek ime, z velkko se mora zaèet) = struct
+type t = neki
+let ...
+let ...
+...
+end
+
+ocaml file so že po defoltu moduli 
+èe se v nekem filu sklicujemo na nek drug file to nardimo tako npr:
+prva.ml -> Prva.neka_funkcija
+vendar ne bo delal, ker mormo pognat na sledeè naèin:
+	ocamlbuild druga.native ta dela samo na trenutnem procesurju vendar pa hitrej dela
+ali pa
+	ocamlbuild druga.byte ta je prenosljiva
+
+

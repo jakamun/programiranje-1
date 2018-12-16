@@ -1,0 +1,62 @@
+èe nimaš se instaliranga jupytra gres v ukazno vrstico in napišeš 'pip3 install jupyter'
+uèasih je blo ipython kar je ubistvu isto sam da je samo za pythone jupyter je pa za vse
+
+ubistvu se uporablja za delo s knjižnico Pandas oz. za obdelavo podatkov(tabel(csv...))
+v pythonu poženeš tako da napišeš v konzolo jupyter notebook
+deluje tako da ustvari nek majhen spletni strežnik
+zadeva je sestavljena iz celic, mi bomo uporabljali dva tipa celic: code(za kodo) in markdown(za besedilo)
+
+v celico vstopimo tako da pritisnemo enter in jo potem lahko urejamo
+z shift+enter poženemo celico
+z control+enter poženemo samo eno vrstico v celici
+novo celico naredimo z 'a'(odpre celico zgori) in z 'b' (odpre celico spodi)
+
+za delo z podatki uvozimo knjiznico pandas: import pandas as pd (z 'as pd' smo samo shranili pod kratico da ne rabimo skoz pandas pisat)
+tabela = pd.read_csv(neki, index_col = 'stolpec') s tem ukazom beremo csv datoteke, z argumentom index_col nastavimo kateri stolpec bo dolocal kljuce vrstice, ce ne nastavimo tega sam ostevilci 
+ker je vedno podatkov v tabelah veliko, lahko uporabimo ukaz pd.options.display.max_rows = 20 (s tem smo mu rekli da nam samo 20 vrstic izpiše)
+v pandasu je osnovni objekt za delo s tabelami dataframe kot v R
+
+nekaj osnovnih ukazov za delo s tabelami:
+	- tabela.head(10) # izpiše prvih deset vrstic
+	- tabela.tail(10) # zadnih deset vrstic ce ne das argumenta ti da zadnih pet
+	- imamo rezine npr. tabela[3:10:2] nam da od cetrtega(ker zacne stet z 0) pa do 10 in vsakega drugega vzame
+	- tabela['ime_stolpca] mi vrne ta stolpec pa še kljuce oz. imena(stevilke) vrstic lahko jih veè naenkrat poklicem to morm zapisat v poseben seznam vse ki jih hocem ce samo tako napisem dobim vrsto oz. vektor, ce damo tabela[['prvi']] dobimo subDataFrame
+	  npr. tabela[[prvi, drugi]] lahko damo tudi tabela.stolpec
+	- nov stolpec lahko tudi ustvarmo tako tabela[nov_stolpec] = podatki
+	- stolpec izbrisemo z metodo .drop(columns=[stolpci ki jih hocmo izbrisat])
+	- Do vrednosti z indeksom i dostopamo z .iloc[i], do tiste s kljuèem k pa z .loc[k]
+
+filtriranje podatkov:
+	- èe naredimo 10 * tabela.vrstica dobim izbrano vrstico pomnoženo z deset in pa seveda kljuèe
+	- èe pa damo tabela.vrstica >= 8 dobimo stolpec True-jev in pa Falsev z kljuci 
+	- tabela[tabela.vrstica >= 8] nam vrne vse tiste pri kateri je vrednost True(vrna nam celo tabelo), lahko jih tud veè naekrat damo z znakom & in pa vsak pogoj mormo dat v oklepaj ce damo | pomeni prvi_pogoj ali drugi_pogoj
+	- lahko tudi min/max nekega stolpca poiscemo tabela.prva_vrstica.max() imamo tudi .mean()(povprecje) ali pa .std() (standardna deviacija)
+	- èe pritisnes tabulator ti ponudi kaksne metode pozna
+	- neko funkcijo ki smo jo sami definirali lahko v filtriranju uporabimo na nacin tabela.stolpec.apply(nasa_funkcija)
+
+urejanje:
+	- tabela.sort_values(ime_stolpca) in uredi tabelo po glede na ta stolpec npr. èe bi dal po letu bi imeli urejeno po letu in sicer od najstarejšega do najmlajšega lahko nastavimo ascending=True/False in nastavimo narašèajoèe(True) ali pa padajoèe(False)
+	- tabelo lahko uredimo po veè stvareh hkrati in sicer damo seznam npr. [prvi_stolpec, drugi_stolpec] in sedaj bo uredil glede na ta dva stolpca najprej upošteva prvi argument potem pa še drugega, ta drug argument upošteva èe imajo po prvem stolpcu kakšne vrstice isto vrednost
+
+združevanje:
+	- imamo metodo .groupby(stolpec) in tako ustvarimo razpredelnico posebne vrste(èe jo poklicemo nam ne vrne tabele ampak samo napiše da je to . DataFrameGroupBy)
+	  v tej razpredelnici so vrstice zdruzene glede na skupno lastnost, èe bi po letih hotu grupira bi mi po dal skupi tiste vrstice ki imajo isto leto
+	- na grupiranih razpredelnica lahko razlicne metode uporabljamo naprimer .mean() 
+	- èe želimo dobiti le število èlanov posamezne skupine uporabimo .size() dobimo samo stolpec in ne razpredelnice
+
+grafi:
+	- %matplotlib inline ( èe zaènejo stvari štekat izklopimo možnost inline; torej damo samo %matplotlib) dodaten argument inline pomeni da nam znotraj jupytra riše, èe je pa brez se pa python okno odpre z narisanim grafom
+	- za obicajen graf uporabimo metodo .plot()
+	- na metodo .plot() lahko dodajamo še dodatne 'metode' da izberemo kašen graf hoèmo npr. .plot.scatter(stolpec1, stolpec2) (ki nam narise razsevni diagram)
+	- stolpcni diagram narisemo z .plot.bar(x,y)
+	- podatki.hist(bins=20(bins nam pove v kolk stolpcev naj nam razdeli)) tako naredimo histogram, ta metoda nam sama pogrupira in presteje podatke in narise stolpcni diagram
+	- 
+
+stikanje:
+	- razpredelnice stikamo s funkcijo merge pandas.merge(tabela1, tabela2) to naredi tako da vrne vse kombinacije kjer se istoimenski stolpci ujemajo 
+	- V osnovi vsebuje staknjena razpredelnica le tiste vnose, ki se pojavijo v obeh tabelah. Temu principu pravimo notranji stik (inner join).
+	  Lahko pa se odloèimo, da izberemo tudi tiste vnose, ki imajo podatke le v levi tabeli (left join), le v desni tabeli (right join) ali v vsaj eni tabeli (outer join). 
+	  Èe v eni tabeli ni vnosov, bodo v staknjeni tabeli oznaèene manjkajoèe vrednosti. Ker smo v našem primeru podatke jemali iz IMDBja, kjer so za vsak film doloèeni tako žanri kot vloge, do razlik ne pride. 
+	  (left_join itd. uporabimo tako da v merge napisemo how='left' na primer)
+	- Vèasih želimo stikati po stolpcih z razliènimi imeni. V tem primeru funkciji merge podamo argument left_on in right_on.
+	- 

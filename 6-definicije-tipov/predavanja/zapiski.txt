@@ -1,0 +1,60 @@
+lastne tipe definiramo z ukazom type npr:
+type r3 = float * float * float
+
+tipi lahko vsebujejo tudi parametre, kot imamo bool list ali pa int list lahko tudi mi definiramo neko zaporedje veè parametrov
+type 'a zaporedje = int -> 'a # to je zaporedje parametrov ki slikajo iz int v a'
+
+ali pa 
+type ('k, 'v) slovar = ('k * 'v) list # tu imamo dva parametra zato ju podamo v oklepaju
+
+Zapisni tip podamo z zahtevanimi polji npr.:
+	type kompleksno = {re : float; im : float} # to so vrednostni tipi
+in potem bi recimo naredili: # tu spodi sem nastavil eno vrednost
+	# let i = {re = 0.0; im = 1.0};; # tu smo dal potem enaèaj èe daš dvopièje ne dela
+	val i : kompleksno = {re = 0.; im = 1.}
+
+èe imamo na primer kompleksen tip in potem vrednost 
+	let nic = {re = 0.0; im = 0.0} # sedaj ne mormo povozt 're' vrednosti lahko pa naredimo sledeèe
+	let ena = {nic with re = 1.0} # z with smo povozil uno nico samo smo mogl definirat novo vrednost
+
+Vsoto podamo z veè možnimi variantami na primer:
+	type barva = Rdeca | Zelena | Modra # posamezni barvi recemo konstruktor
+konstruktorji morajo biti napisani z veliko zacetnico drugace se sesuje
+
+# [Rdeca; Zelena; Zelena];;
+- : barva list = [Rdeca; Zelena; Zelena] # vidmo da on ze takoj vid kakšnega tipa so
+èe damo not neko vrednost ki je nismo podal se prtož da to ni istga tipa kot je on prèakvol
+
+konstruktorji sprejmejo tudi argumente kot je na primer:
+type geometrijski_objekt =
+  | Tocka
+  | Krog of float
+  | Pravokotnik of float * float # vidmo da s of doloèmo ali konstruktor sprejme argument
+èe bomo podal krog brez argumenta se bo prtožu 
+
+na naših lastnih tipih so lahko seveda definiramo funkcije npr:
+let povrsina = function
+  | Tocka -> 0.
+  | Krog r -> 3.14 *. r ** 2.
+  | Pravokotnik (v, s) -> v *. s
+
+tudi definiranje samo tako je koristno:
+type leto = Leto of int
+type visina = Visina of int
+type stevilo = Stevilo of int
+
+kajti let koliko_let_je_minilo (Leto l) = 2018 - l;;
+èe želimo uporabiti to funkcijo na kakšnem drugem tipu ne deluje
+
+za delne funkcije raje uporabimo tip option
+type 'a option = None | Some of 'a # torej imamo prazen tip ali pa nekaj
+
+tipe lahko podamo tudi rekurzivno oz. da ga definiramo s pomoèjo samega sebe npr:
+type izraz =
+  | Stevilo of int
+  | Plus of izraz * izraz
+  | Minus of izraz
+  | Krat of izraz * izraz
+
+ze vgrajen rekurziven(induktiven) tip so seznami, ker je seznam ali prazen ali pa je sestavljen iz glave in repa
+

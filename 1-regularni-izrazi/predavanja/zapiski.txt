@@ -1,0 +1,49 @@
+knjižnica za delo z regularnimi izriza v pythonu je 're' ( torej daš import re)
+v pythonu ko delamo z regularnimi izrazi èe damo pred niz r(r'neki') python interpritera kot regularni izraz in nimas tezav z backslashi('akak\s') tko kot je voklepaju zna bit problem
+
+abc…	Letters
+123…	Digits
+\d	Any Digit
+\D	Any Non-digit character
+.	Any Character razen znak za novo vrstico
+\.	Period
+[abc]	Only a, b, or c
+[^abc]	Not a, b, nor c
+[a-z]	Characters a to z
+[0-9]	Numbers 0 to 9
+\w	Any Alphanumeric character
+\W	Any Non-alphanumeric character
+{m}	m Repetitions
+{m,n}	m to n Repetitions
+*	Zero or more repetitions
++	One or more repetitions
+?	Optional character
+\s	Any Whitespace
+\S	Any Non-whitespace character
+^…$	Starts and ends
+(…)	Capture Group
+(a(bc))	Capture Sub-group
+(.*)	Capture all
+(abc|def)	Matches abc or def
+\b oznaèuje mejo med èrko in nekim drugim znakom, uporabno je za ujemanje celih besed \w+\b
+\n se mi zdi da je to regularni izraz za novo vrstico
+
+poznamo tudi refereranje na grupe, ki smo jih naredili; \0 (je celoten niz) \1 (prva grupa itd)
+prav tako moramo dati pred niz r zato da python tretira niz kot regularni izraz drugaèe imamo z backslashi probleme (da brez r-ja razume \ kot \ moramo dat še en \ predprvotnega in to se zna zelo hitro zakomplicirat)
+ujemanje.group(1) pobere vn tiste ki se ujemajo z grupo 1 ki smo je že prej nekje doloèil
+ 
+Grupe lahko tudi poimenujemo in sicer (?P<id>reuglarni izraz) (sedaj je id ime te grupe refereramo se še vedno isto) poklièeš lahko (?P=id)
+
+v pythonu pri medvedu zadna naloga r'abc(12.)' da mas grupe(oklepaj je group 1 in potem se lahko na te groupe sklicujes r'abc(12.)\1' ta backslash 1 se sklicuje na grupo
+
+nekatere vgrajene funkcije za delo z regularnimi izrazi:
+	- re.findall(niz, besedilo) pri regularnih izrazih ti vrne v seznamu vse besede iz besedila v katerih se pojavi niz
+	- re.finditer(pattern, string) vrne iterator ujemanj, oziroma za vsako ujemanje vrne iteraror ta objekt
+        - èe imaš v regularnem izrazu grupe jih lahko klièeš na slednji naèin ujemanje.group(1) s tem ukazom smo poklicali prvo grupo
+	- z ujemanje.groupdict() nam izpiše slovar vseh grup k se ujemajo z regularnim izrazom # to je dost nerazumljivo poglej dokumentacijo
+	- re.compile(niz_ki_predstavlja_regularen_izraz) pretvori v objekt ki predstavlja regularen izraz --> ko smo to enkrat naredil namesto da klicemo re.finditer(pattern(to smo pretvoril v objekt), string)
+	  poklicemo pattern.finditer(string)
+	- re.split(vzorec, besedilo) razdeli besedilo glede na vzorec, nikoli ne bo razdelil niza ki je samo ena dolga beseda, ali pa èe se niè ne ujema, potem vrne samo seznam tega kar smo not vstavl na drugem mestu 
+	- 
+
+

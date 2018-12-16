@@ -1,0 +1,7 @@
+v pythonu je za delo z csv-ji namenja kjjiznica csv (import csv)
+
+imamo razred(class) pisalcev csv datotek: 
+writer = csv.writer(datoteka) # s tem smo naredili objekt za pisanje v datoteko
+potem na ta objekt lahko klicemo metodo writer.writerow(('id', 'naslov')) in tako smo napisali v našo datoteko id in naslov
+imamo tudi razred DictWriter ki je namenje za zapisovanje slovarjev v csv datoteke
+writer = csv.DictWriter(datoteka, seznam_stolpcev) --> ta razred ima posebno metodo writer.writeheader(), ki zapiše imena stolpcev ki smo mu jih doloèili 

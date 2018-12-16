@@ -1,0 +1,33 @@
+funkcije ki za argument vzamejo druge funkcije, jim pravimo funkcije višjega reda 
+prvega reda je èe vzame obièajen argument
+èe vzame funkcijo prvega reda reèemo da je drugega reda itd.
+
+anonimne funkcije pišemo kot fun x -> ...
+	let moja_funkcija' = fun x -> 2 * x + 1;;
+
+èe funkciji dveh argumentov damo samo en argument dobimo ven funkcijo ki sprejme en argument in nardi isto kot prvotna samo da je en argument ze fiksen
+funkcija dveh argumentov =funkcija enega argumenta (prvega), ki vrne funkcijo enega argumenta (drugega)
+
+velikokrat uporabljamo isto strukturo kot je npr.:
+	let rec vsota = function
+  	  | [] -> 0
+  	  | x :: xs -> x + vsota xs
+
+isto smo nardil za dolzino in preslikavo
+zato obstaja neka splošna struktura:
+	let rec zlozi_desno f xs z = match xs with
+  	  | [] -> z
+  	  | x :: xs -> f x (zlozi_desno f xs z)
+
+lahko je tudi zlozi_levo ta pa je repna vse se sprot racuna 
+	let rec zlozi_levo f z xs = match xs with
+  	  | [] -> z
+  	  | x :: xs -> zlozi_levo f (f z x) xs
+
+v ocamlu so tudi ze vgrajeni moduli, klicemo jih tako Modul.funkcija npr: String.length nam vrne dolzino niza
+nekaj modulov:
+	- List # za delo na seznamih
+	- String # za delo na nizih
+	- Pervasives # je najbol osnoven za logicne vrednosti minimu itd
+
+http://caml.inria.fr/pub/docs/manual-ocaml/libref/

@@ -1,0 +1,218 @@
+ocaml (.ml) je funkcijski proramski jezik, to pomeni da bolj pišemo z izrazi in vrednostmi kot pa z zaporedji ukazov
+glavna prednost ocaml in podobnih pred pythonom in ostalimi je da je zelo hiter
+
+nekaj osnovnih stvari:
+	- z let definiramo vrednosti(let x=9) v pythonu smo samo napisal tu rabmo dat let spredi
+	- vsak ukaz je treba z dvojnimi(;;) podpicji zakljucit v datoteki nam podpicij ni treba pisat razen v redkih primerih
+	- odgovor nam vrne kot tip in odgovor npr. int = 42, vsak ukaz v ocmlu ima svoj tip!
+	- se ena posebnost je ne pisemo oklepajev in vejic vsaj v takih primeri ne -> min 8 7 * 6 v pythonu bi bilo min((8,7) * 6) v ocamlu je pa tako
+	- uporaba (aplikacija) funkcij ima najvišjo prioriteto
+	- za razliko od pythona ocaml ni obcutljiv na zamike lahko je vse poravnano pa dela
+	- z ukazamo let ... in ... pisemo lokalne definicije npr: 
+							let odgovor = 
+								let prvi = min 8 7 in
+								let drugi = 6 in
+								prvi * drugi;;
+	- lokalne defincije niso vidne navzven npr. ce bi poklicali prvi bi nam error vrnl samo odgovor lahko poklicemo
+	- z and podamo vec lokalnih definicij hkrati vendar èe imamo: 	
+								- let a=10 in b=a+1 in 2*b # vrne 22
+								- let a=10 and b=a+1 in 2*b # ne deluje ker smo a ib hkrati definiral in napise ne vem kaj je a
+	- èe napisemo v datoteki nek ukaz in ga pozenemo ta ukaz poklicemo tako da napisemo v terminal # #use 'ime_datoteke.ml';; in nam vrne vrednost tega ukaza
+
+Cela števila imajo tip int
+# 12 * (34 + 67) - 89;;
+- : int = 1123
+# 22 / 7;; # celostevilsko deljenje
+- : int = 3
+# 22 mod 7;; # ostanek pri deljenju
+- : int = 1
+# succ 5 * pred 8;; # succ 5 nam da 6 (torej nasledno stevilo) in pred 8 nam da pa 7 torej predhodnik
+- : int = 42
+
+Števila s plavajoèo vejico imajo tip float
+# 12.0 *. (34.0 +. 67.0) -. 89.0;; # operacije na stevilih s plavajoco vejico imajo piko zravn
+- : float = 1123.
+# 22. /. 7.;;
+- : float = 3.14285714285714279
+# let pi = 4. *. atan 1.;;
+val pi : float = 3.14159265358979312
+# cos pi;;
+- : float = -1.
+
+OCaml strogo loèi med int in float
+# 2 * pi;;
+      ^^
+Error: This expression has type float but an
+  expression was expected of type int
+
+ 2. *. pi;;
+- : float = 6.28318530717958623
+ce vi dal 2. * pi ne dela ocitno
+in prav tako ne dela ce dam 2 *. pi ker ne mormo operirat z razlicnimi tipi
+celostevilo pretvorimo v float na nacin float_of_int 2 dobim 2.
+
+Logiène vrednosti imajo tip bool(podobna logika kot v pythonu z majhnimi detaljnimi razlikami)
+# false && not (false || true);; &&(and) || (or)
+- : bool = false
+# 3 < 5 || 3 >= 5;;
+- : bool = true
+# if 3 <> 5 then 10 else 20;; <> znak za neenakost v python(!=)
+- : int = 10
+# (if 3 = 4 then cos else sin) pi;; za enakost pa (=)
+- : float = 1.22464679914735321e-16
+
+Nizi imajo tip string
+# "Programiranje " ^ string_of_int 1;; nize stikamo z ^
+- : string = "Programiranje 1"
+# max "abcd" "efg";; # ker je e ksneje v abecedi od a
+- : string = "efg"
+
+Znaki imajo tip char
+# 'a';;
+- : char = 'a'
+
+Funkcije imajo tip oblike tip_arg -> tip_rez
+# truncate;; # truncate spremeni float v int
+- : float -> int = <fun> # nam pove iz kje v kaj slika
+# let kvadriraj n = n * n;;
+val kvadriraj : int -> int = <fun>
+# let zmnozi x y = x * y;;
+val zmnozi : int -> int -> int = <fun>
+# let dvakrat_na_nic f = f (f 0);;
+val dvakrat_na_nic : (int -> int) -> int = <fun>
+# fun x -> 2 * x + 1;;
+- : int -> int = <fun>
+
+Rekurzivne funkcije definiramo z let rec
+let rec fakulteta = function
+  | 0 -> 1
+  | n -> n * fakulteta (n - 1)
+let rec fib = function
+  | 0 -> 0
+  | 1 -> 1
+  | n -> fib (n - 1) + fib (n - 2)
+let hitri_fib n =
+  let rec aux n a b =
+    if n = 0 then a else aux (n - 1) b (a + b)
+  in aux n 0 1
+
+Hkrati lahko definiramo veè rekurzivnih funkcij
+let rec je_sodo = function
+  | 0 -> true
+  | n -> je_liho (n - 1)
+and je_liho = function
+  | 0 -> false
+  | n -> je_sodo (n - 1)
+
+Ocaml ima zanke vendar je bol da se jih ne uporablja!
+
+Nabori imajo tip tip1 * tip2 * … * tipn
+# (1, 2 < 3, cos pi);;
+- : int * bool * float = (1, true, -1.)
+# (1, (2, 3));;
+- : int * (int * int) = (1, (2, 3))
+Prazen nabor ima tip unit
+# ();;
+- : unit = ()
+
+Nabore lahko razstavljamo z vzorci
+# let (x, y) = (1, "bla");;
+val x : int = 1
+val y : string = "bla"
+let razdalja koord1 koord2 =
+  let dx = fst koord1 -. fst koord2
+  and dy = snd koord1 -. snd koord2
+  in
+  sqrt (dx ** 2. +. dy ** 2.)
+let razdalja (x1, y1) (x2, y2) =
+  sqrt ((x1 -. x2) ** 2. +. (y1 -. y2) ** 2.)
+
+Seznami imajo tip tipel list
+# [1; 2; 3; 4];;
+- : int list = [1; 2; 3; 4]
+# ['a'; 'b'; 'c'; 'd'];;
+- : char list = ['a'; 'b'; 'c'; 'd']
+# 1 :: 2 :: [3; 4];; :: nam da na zaèetek seznam ta elemnt vendar je z namenom tako ker so seznami dejansko napisani tako [1::2::3::4::5] 
+pravmo da je :: konstruktor sseznamov in pa pomembno je da ko mu dodamo nov element naredi nov seznam
+ in zato ce bi mel prejsn seznam shranjen v dveh spremenljivkah in potem dodali nov element samo v enega se ne bi niè zgodil s ta drugim tak problem v pythonu
+v ocamlu pa ubistvu sploh ne povozi obstojeèega seznama vrne nam nek rezultat vendar ga ne povozi in sploh ni naèina da bi se to dal naredit
+- : int list = [1; 2; 3; 4]
+# "a" :: "b" :: ["c"; "d"];;
+- : string list = ["a"; "b"; "c"; "d"]
+# [1; 2; 3] @ [4; 5; 6];; z afno stikamo sezname skupaj
+
+
+Tudi sezname razstavljamo z vzorci
+let citiraj_knjigo avtorji naslov =
+  match avtorji with
+  | [] -> naslov
+  | [avtor] -> avtor ^ ": " ^ naslov
+  | prvi :: _ -> prvi ^ " in ostali: " ^ naslov
+# citiraj_knjigo [] "Skrivnosti podzemlja";;
+- : string = "Skrivnosti podzemlja"
+# citiraj_knjigo ["Kos"; "Golob"] "Fizika 1";;
+- : string = "Kos in ostali: Fizika 1"
+Pozor: @ ne sme nastopati v vzorcih
+24 / 29
+
+Vzorce lahko tudi gnezdimo
+let za_lase_privlecena_funkcija = function
+  | [] -> 0
+  | [(x, _); (y, z)] -> x + y + z
+  | ((_, x) :: _) -> 3 * x
+# za_lase_privlecena_funkcija [];;
+- : int = 0
+# za_lase_privlecena_funkcija [(1, 2)];;
+- : int = 6
+# za_lase_privlecena_funkcija [(1, 2); (3, 4)];;
+- : int = 8
+25 / 29
+
+Kaj je tip funkcije @?
+# [true; false] @ [false; true];;
+- : bool list = [true; false; false; true]
+# [1; 2] @ [3; 4; 5];;
+- : int list = [1; 2; 3; 4; 5]
+bool list -> bool list -> bool list
+int list -> int list -> int list
+int list list -> int list list -> int list list
+uglavnem je fora da morta bit seznama tipa istih elementov in potem je tudi staknjen seznam seznam istih elementov
+
+Vrednostim, ki imajo v tipih spremenljivke, pravimo parametrièno polimorfne
+# (@);;
+- : 'a list -> 'a list -> 'a list = <fun>
+# fst;;
+- : 'a * 'b -> 'a = <fun>
+# ignore;;
+- : 'a -> unit = <fun>
+# [];;
+- : 'a list = []
+28 / 29
+
+tipi v ocamlu so statièni, ker je v funkciji lahko samo en tip, takoj prever èe so kakšni problemi pri dinamiènih pa šele med izvajanjem
+medtem ko je v pythonu dinamièni, lahko so razlièni tipi v funkciji to hitrej napišemo samo lahko pride do kakšnih izjem, ki vrnejo napako mi pa tega ne vidmo
+ocaml nam pa takoj pove za vse napake, ki smo jih nardil zato je iz tega pogleda bol vendar pa poèasnej pišeš
+
+ocamlovi tipi so velik bogatejši oz. nam veiko veè pove o posameznih tipih medtem ko na python samo pove to je seznam na primer
+
+klic funkcije je repen, èe se zgodi na koncu:
+
+	let f x = 3 * x # f se izvede zadn
+	let g x = f (6 + x) # g najprej uzraèuna 6+x in potem poklièe f
+	let h x = g (4 * x) # h najprej izraèuna 4 * x in potem poklice g
+funkcije se na odlagajo na sklad in èakajo ko se zaène nasledna funkcija izvajat se ta ki je poklicala nasledno funkcijo se ustavi
+
+Funkciji, kjer so vsi rekurzivni klici repni, pravimo repno rekurzivna
+
+let rec dolzina' acc = function
+  | [] -> acc
+  | _ :: xs -> dolzina' (acc + 1) xs
+
+v ocamlu je glavno orodje je rekurzija
+zato ocaml optimizira klice, ni tako kot v pythonu kjer je rekurzija omejena in ko gremo pregloboko se nam sesuje reached max depth recursion
+optimizira rekurzijo samo èe je repna rekurzija èe ni se isto sesuju samo da pri malo veèjih številih kot pa python
+
+Python je proceduralni & imperativni jezik oziroma Raèunalniku damo zaporedje ukazov, ki zaèetno stanje spravijo v želeno stanje.
+OCaml je funkcijski & deklarativni jezik oziroma Želeni rezultat programa opišemo s sestavljanjem funkcij.
+
+

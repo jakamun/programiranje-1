@@ -1,0 +1,15 @@
+csv je uporaben zgolj za tabele
+json pa se uporablja èe želimo nekoliko bolj struktorirane podatke zapisat, recimo prijatlji na fb so tko zapisani
+json je zelo podoben slovarjem, imamo kljuè njegova vrednost je potem lahko nov slovar in tako dalje
+nizi so vedno v dvojnih narekovajih in kljuèi slovarjev so lahko samo nizi
+
+v pythonu za delo z json samo poklicemo import json
+csv lahko pišemo vrstico po vrstico json pa je treba v enmu kosu napisat
+zato obièajno zbiramo naše podatke v seznamu(ali èem podobnem, važno je da je lahko za pretvorit v json) in potem vse naekrat pretvorimo
+dve osnovni metodi sta json.dump(objekt, datoteka) ki sprejme objekt in naredi json datoteko in json.load(datoteka) ki prebere json in vrjetno vrne objekt(ne vem toèn)
+za obe metodi imamo dve verjanti al dobimo datoteko ali pa niz èe želimo niz dodamo še konènico s, druèe pa naredimo kot v prejšni konènici
+dump-u lahko dodamo še kup paramatrov parametr indent=4(kero kol cifro sprejme) nam lepo po vrsticah izpiše json da je pregleden
+json ima tudi vgrajen da razne šumnike in podobne znake izpiše z kodo, ker nekateri bralniki še vedno ne znajo dobr unicoda brat, to izklopmo tako da damo ensure_ascii=False
+
+
+
