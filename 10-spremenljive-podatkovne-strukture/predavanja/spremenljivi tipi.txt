@@ -1,0 +1,18 @@
+v pythonu je veèina stvari objekti in so spremenjlivi
+v ocamlu pa veèina stvari ni npr. èe dodamo v seznam novo vrednost se bo naredu nov seznam prvotn ostane isti
+vendar imamo tudi take stvari
+reference so najbol pogost tip ki je spremenljiv
+referenaca je neka škatlca kjer je not neka vrednost in je spremenljiva
+	let r = ref 20;; # funkcija ref vzame neko vrednost alfa v našem primeru int in ga spravi v neko škatlco, ubistvu naredi referenco
+
+ta r lahko povozm na sledeè naèin
+	r := 5;; tako je sedaj r neka škatlca z petko
+èe bi mel nek seznam v škatlci in bi ga spremenu se prvotn seznam nebi spremenu samo seznam v referenci
+
+z ukazom !r;; mi pove kaj je not spravlen in kakšen tip je
+èe mu povem samo r;; mi vrne celo referenco paè vrednost znotraj te škatlce
+
+èe mam seznam pod referenco in naredim x :: !ref;; se bo referenca spremenila prvotn seznam je ostal isti vendar v škatlco se je shrani nov seznam ki ima še element x notr
+
+še en spremenljiv tip v ocamlu so tipi array kar so ubistvu seznami predstavljeni s tabelami
+teh tabel se neda razširiti, kar smo navajeni iz pythona
