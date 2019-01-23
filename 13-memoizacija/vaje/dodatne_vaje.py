@@ -1,4 +1,4 @@
-
+from functools import lru_cache
 
 # Nahrbtnik
 # =========
@@ -25,6 +25,8 @@ izdelki = [
 ]
 
 
+
+
 # Jajca
 # =====
 #
@@ -40,3 +42,39 @@ izdelki = [
 #
 # Napišite funkcij, ki bo izračunala maksimalno število metov (v najslabšem primeru), da ugotovimo
 # številko kritičnega nadstropja, če imamo na voljo točko k jajc.
+
+
+
+#  We are solving the problem of alternatingly colored towers. There are four
+#  different types of building blocks, two of them blue and two red. The blue
+#  blocks have heights 2 and 3 and the red ones 1 and 2.
+
+#  Write the function [alternating_towers] for a given height calculates the
+#  number of different towers of given height that we can build using alternatingly
+#  colored blocks (red on blue, blue on red etc.). We may start with any color.
+
+#  Hint: Use two mutually recursive auxilary functions using the keyword "and".
+#  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#  # alternating_towers 10;;
+#  - : int = 35
+
+@ lru_cache(maxsize=None)
+def stolpi(n, barva):
+    if n == 0:
+        return 1
+    elif n < 0:
+        return 0
+    else:
+        if barva == 'red':
+            option1 = stolpi(n - 1, 'blue')
+            option2 = stolpi(n - 2, 'red')
+            return option1 + option2
+        else:
+            option3 = stolpi(n - 2, 'red')
+            option4 = stolpi(n - 3, 'red')
+            return option3 + option4
+
+
+def alternajoci_stolpi(n):
+    return stolpi(n, 'blue') + stolpi(n, 'red')
+

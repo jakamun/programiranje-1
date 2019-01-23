@@ -1,5 +1,10 @@
 let ostanek = 10000000000
 
+let rec potenciranje a n = 
+  if n <= 0 then 1
+  else if n mod 2 = 0 then potenciranje (a*a) (n/2)
+  else a * potenciranje (a*a) ((n-1)/2)
+
 let rec fib = function
   | 0 -> 0
   | 1 -> 1

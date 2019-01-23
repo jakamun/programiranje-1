@@ -164,15 +164,25 @@ let selection_sort list =
  - : int array = [|0; 4; 2; 3; 1|]
 [*----------------------------------------------------------------------------*)
 
-
+let swap a i j = 
+  let element = a.(i) in
+  a.(i) <- a.(j);
+  a.(j) <- element
 
 (*----------------------------------------------------------------------------*]
  Funkcija [index_min a lower upper] poišče indeks najmanjšega elementa tabele
  [a] med indeksoma [lower] and [upper] (oba indeksa sta vključena).
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
- index_min [|0; 2; 9; 3; 6|] 2 4 = 4
+ index_min [|0; 2; 9; 3; 6|] 2 4 = 3
 [*----------------------------------------------------------------------------*)
 
+let index_min a lower upper = 
+  let min = ref lower in
+  for i=(lower+1) to upper do
+    if a.(!min) > a.(i) then
+    min := i
+  done;
+  !min
 
 (*----------------------------------------------------------------------------*]
  Funkcija [selection_sort_array] implementira urejanje z izbiranjem na mestu. 
@@ -180,4 +190,17 @@ let selection_sort list =
  Namig: Za testiranje uporabi funkciji [Array.of_list] in [Array.to_list]
  skupaj z [randlist].
 [*----------------------------------------------------------------------------*)
+
+let selection_sort_array tabela = 
+  let dolzina = Array.length tabela in
+  for i=0 to (dolzina - 1) do
+    let j = index_min tabela i (dolzina - 1) in
+    swap tabela i j
+  done
+
+(*Funkcija s katero preverim a dela prov*)
+let selection_sort_list list =
+  let a = Array.of_list list in
+  selection_sort_array a;
+  Array.to_list a
 

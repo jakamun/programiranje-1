@@ -36,6 +36,20 @@ let rec hitro_uredi xs =
     let (xs1', xs2') = (hitro_uredi xs1, hitro_uredi xs2) in
     xs1' @ p :: xs2'
 
+let rec pivot p sez = 
+  let rec aux acc1 acc2 = function
+  | [] -> (acc1, acc2)
+  | x :: xs -> 
+    if p >= x then aux (x :: acc1) acc2 xs else aux acc1 (x :: acc2) xs in
+  aux [] [] sez
+
+let rec quick_sort sez =
+  match sez with
+  | [] | _ :: [] -> []
+  | p :: xs -> 
+    let (mansi, vecji) = pivotiraj p xs in
+    let (mansi', vecji') = (hitro_uredi mansi, hitro_uredi vecji) in
+    mansi' @ p :: vecji'
 
 let nakljucni_seznam m n = List.init n (fun _ -> Random.int m)
 

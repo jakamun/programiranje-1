@@ -1,5 +1,16 @@
 (* ========== Vaje 6: Dinamično programiranje  ========== *)
 
+(*najdalse skupno podzaporedje*)
+
+let rec podzaporedje sez1 sez2 =
+  match sez1, sez2 with
+  | [], _ | _, [] -> []
+  | x :: xs, y :: ys -> 
+  if x = y then x :: podzaporedje xs ys else
+  let brezx = podzaporedje xs sez2
+  and brezy = podzaporedje sez1 ys in
+  if (List.length brezx) <= (List.length brezy) then brezy else brezx
+
 
 (*----------------------------------------------------------------------------*]
  Požrešna miška se nahaja v zgornjem levem kotu šahovnice. Premikati se sme
@@ -21,6 +32,19 @@ let test_matrix =
      [| 2 ; 4 ; 5 |];
      [| 7 ; 0 ; 1 |] |]
 
+let max_cheese cheese_matrix = 
+  let stevilo_stolpcev = Array.length cheese_matrix.(0) in
+  let stevilo_vrstic = Array.length cheese_matrix in
+  let rec aux i j =
+    if (i = stevilo_vrstic - 1) && (j = stevilo_stolpcev - 1) then cheese_matrix.(i).(j)
+    else if i = stevilo_vrstic - 1 then cheese_matrix.(i).(j) + aux i (j + 1)
+    else if j = stevilo_stolpcev - 1 then cheese_matrix.(i).(j) + aux (i + 1) j else
+    let desno = aux i (j + 1) in
+    let dol = aux (i + 1) j in
+    cheese_matrix.(i).(j) + max desno dol
+    in
+    aux 0 0
+
 (*----------------------------------------------------------------------------*]
  Rešujemo problem sestavljanja alternirajoče obarvanih stolpov. Imamo štiri
  različne tipe gradnikov, dva modra in dva rdeča. Modri gradniki so višin 2 in
@@ -37,6 +61,18 @@ let test_matrix =
  - : int = 35
 [*----------------------------------------------------------------------------*)
 
+let rec alternating_towers visina = 
+  let rec rdeci visina = 
+    if visina <= 0 then 0
+    else if visina <= 2 then 1
+    else rdeci (visina - 1) + modri (visina - 2)
+    and modri visina = 
+    if visina <= 0 then 0
+    else if visina = 2 then 1
+    else if visina = 3 then 2
+    else rdeci (visina - 2) + modri (visina - 3)
+    in
+    rdeci visina + modri visina
 
 (*----------------------------------------------------------------------------*]
  Na nagradni igri ste zadeli kupon, ki vam omogoča, da v Mercatorju kupite
@@ -68,3 +104,34 @@ let articles = [|
   ("Nutella", 4.99, 0.75);
   ("juice", 1.15, 2.0)
 |]
+
+let best_value articles max_w =
+  let rec get_item acc_w acc_p (_, p, w) =
+    if acc_w +. w > max_w then
+      acc_p
+    else
+      shopper (acc_w +. w) (acc_p +. p)
+  and shopper w p =
+    let choices = Array.map (get_item w p) articles in
+    Array.fold_left max 0. choices
+  in
+  shopper 0. 0.
+
+let best_value_unique articles max_w =
+  (* Store which items have already been chose in the array [taken]. *)
+  (* Choose the item if you can and recursively search further. *)
+  let rec get_item taken acc_w acc_p i (_, p, w) =
+    if acc_w +. w > max_w || taken.(i) then
+      (* Item is not suitable, return what we got so far.*)
+      acc_p
+    else
+      (* Find best value after choosing the item, mark choice in [taken]. *)
+      let new_taken = Array.copy taken in
+      (new_taken.(i) <- true; shopper new_taken (acc_w +. w) (acc_p +. p))
+  (* Choose every item in the list and return the value of the best choice. *)  
+  and shopper taken w p =
+    let choices = Array.mapi (get_item taken w p) articles in
+    Array.fold_left max 0. choices
+  in
+  let taken = Array.map (fun _ -> false) articles in
+  shopper taken 0. 0.
