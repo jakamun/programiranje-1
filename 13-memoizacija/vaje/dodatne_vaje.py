@@ -25,6 +25,17 @@ izdelki = [
 ]
 
 
+def nahrbtnik_unique(seznam_artiklov, k):
+    if len(seznam_artiklov) == 0:
+        return 0
+    else:
+        for _, cena, teza in seznam_artiklov:
+            if (k - teza) <= 0:
+                return nahrbtnik_unique(seznam_artiklov[1:], k)
+            else:
+                moznost1 = nahrbtnik_unique(seznam_artiklov[1:], k)
+                moznost2 = cena + nahrbtnik_unique(seznam_artiklov[1:], k - teza)
+                return max(moznost1, moznost2)
 
 
 # Jajca
@@ -76,5 +87,5 @@ def stolpi(n, barva):
 
 
 def alternajoci_stolpi(n):
-    return stolpi(n, 'blue') + stolpi(n, 'red')
+    return stolpi(n, 'red') + stolpi(n, 'blue')
 

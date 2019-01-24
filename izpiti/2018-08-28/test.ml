@@ -45,6 +45,7 @@ let rec monotona_pot = function
     List.fold_left (fun x y -> if List.length x > List.length y then x else y) pure_left options
 
 
+    
 (*TRETJA NALOGA*)
 
 type 'a veriga = 
